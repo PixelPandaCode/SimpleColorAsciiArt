@@ -27,13 +27,15 @@ def closest_color(pixel_color):
     colorrama_names = [Fore.BLACK, Fore.RED, Fore.GREEN, Fore.BLUE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA, Fore.WHITE]
     return colorrama_names[closest_index]
 
-def map_pixels_to_ascii(image, range_width=25.5, new_width=100):
+def map_pixels_to_ascii(image, new_width=100):
     pixels = image.getdata()
 
-    ascii_str = Style.BRIGHT
+    ascii_str = ""
+    range_width=25.5
     i = 0
     for pixel_value in pixels:
-        intensity = (pixel_value[0] + pixel_value[1] + pixel_value[2]) / 3
+        intensity = (0.299 * pixel_value[0] 
+            + 0.587 * pixel_value[1] + 0.114 * pixel_value[2])
         index = int(intensity//range_width)
         if index >= len(ASCII_CHARS):
             index = len(ASCII_CHARS) - 1
@@ -52,8 +54,7 @@ def convert_image_to_ascii(image_path, new_width=100):
         return
 
     image = scale_image(image, new_width=new_width)
-
     ascii_str = map_pixels_to_ascii(image, new_width=new_width)
     return ascii_str
 
-print(convert_image_to_ascii('asuka.jpg', 200))
+print(convert_image_to_ascii('asuka.jpg'))
